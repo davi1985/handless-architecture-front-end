@@ -19,7 +19,7 @@ export const useSmartphones = () => {
     arr: [],
     key: "storage" | "manufacturer"
   ): string[] => {
-    const result = arr?.map((item) => item[`${key}`]);
+    const result = arr?.map((item) => item[key]);
 
     return [...new Set(result)];
   };
