@@ -1,10 +1,20 @@
-import { FilterButton } from "./components/FilterButton";
-import { SmartphoneItem } from "./components/SmartphoneItem";
+import { AllSmartphones } from "./components/AllSmartphones";
+import { Manufacturer } from "./components/Manufacturer";
+import { Storage } from "./components/Storage";
 import { useSmartphones } from "./hooks/useSmartphones";
 
 export function App() {
-  const { setManufacturer, setStorage, smartphones, normalizeData } =
-    useSmartphones();
+  const { setManufacturer, setStorage, smartphones, error } = useSmartphones();
+
+  if (error) {
+    return (
+      <div className="max-w-5xl m-auto shadow-lg">
+        <h1 className="text-center text-3xl text-red-700 font-bold mt-4">
+          Não foi possivel carregar os dados.
+        </h1>
+      </div>
+    );
+  }
 
   return (
     <section className="max-w-5xl m-auto shadow-lg">
@@ -13,40 +23,13 @@ export function App() {
       </h1>
 
       <div className="flex w-full space-x-6 mt-12">
-        <div className="flex flex-col shadow items-center p-6 w-full">
-          <label className="text-lg font-bold">Armazenamento</label>
-          <div className="flex space-x-2 mt-6">
-            <FilterButton onClick={() => setStorage("")}>Todos</FilterButton>
+        <Storage setStorage={setStorage} />
 
-            {normalizeData(smartphones as [], "storage").map((item) => (
-              <FilterButton onClick={() => setStorage("64GB")} key={item}>
-                {item}
-              </FilterButton>
-            ))}
-          </div>
-        </div>
-
-        <div className="flex flex-col shadow items-center p-6 w-full">
-          <label className="text-lg font-bold">Marca</label>
-          <div className="flex space-x-2 mt-6">
-            <FilterButton onClick={() => setManufacturer("")}>
-              Todas
-            </FilterButton>
-
-            {smartphones &&
-              normalizeData(smartphones as [], "manufacturer").map((item) => (
-                <FilterButton onClick={() => setManufacturer(item)} key={item}>
-                  {item}
-                </FilterButton>
-              ))}
-          </div>
-        </div>
+        <Manufacturer setManufacturer={setManufacturer} />
       </div>
 
       <div className="flex flex-wrap justify-around space-y-12 mt-12">
-        {smartphones?.map((smartphone) => (
-          <SmartphoneItem data={smartphone} key={smartphone.id} />
-        ))}
+        {smartphones && <AllSmartphones smartphones={smartphones} />}
       </div>
     </section>
   );

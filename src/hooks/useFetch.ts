@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 
-export const useFetch = <T>(url: string) => {
+interface IUseFetch<T> {
+  response: T | undefined;
+  error: any;
+}
+
+export const useFetch = <T>(url: string): IUseFetch<T> => {
   const [response, setResposne] = useState<T>();
   const [error, setError] = useState<any>();
 
